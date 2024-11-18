@@ -1,0 +1,136 @@
+<script src='https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/dash-shaka-playback@latest/dist/dash-shaka-playback.min.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/shaka-player/4.3.8/shaka-player.ui.js'></script>
+<link href='https://ajax.googleapis.com/ajax/libs/shaka-player/4.3.8/controls.css' rel='stylesheet' type='text/css'/>
+<script async='async' src='//cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
+<div class='post-body-artikel'>
+
+    <style>
+        #croOt {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            gap: 5px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            
+           
+        }
+
+        #croOt .nav-item {
+            display: inline-block;
+        }
+
+        #croOt .nav1-link {
+            text-decoration: none;
+            color: white;
+        }
+
+        #croOt button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #croOt button:hover {
+            background-color: #0056b3;
+        }
+
+        #croOt button.active {
+            background-color: #28a745;
+        }
+
+        [data-shaka-player-container] {
+            width: 100%;
+            height: 100%;            
+            aspect-ratio: 16/9;
+           
+        }
+    </style>
+
+    
+
+    <!-- Player Container -->
+    <center>
+        <div data-shaka-player-container>
+            <video autoplay data-shaka-player id="video" style="width: 100%; height: 100%;"></video>
+        </div>
+    </center>
+
+    <script>
+        async function initPlayer(source, fallback) {
+            const video = document.getElementById('video');
+            const ui = video['ui'];
+            const controls = ui.getControls();
+            const player = controls.getPlayer();
+
+            // Configure ClearKey DRM
+            player.configure({
+                drm: {
+                    clearKeys: {
+                         'e509735b5f89750d42ace2410ead7210': '1726083509d570b5de4730ab9f338cc3',
+                         '27828727f0a3a0b4fbc668378ccf8c10': '958e9cb7389e20948de5a542d2729ecf',
+                         '0cb7980e9d1d8957f9a293ed96342410': '11da1ad368d0cacffe4824b6b35e22b7',
+                         'O8Pw5Riu2S6AqYEY5bwsEA': 'X842T7xEmYVll7GalvRGSA'
+                      
+                    }
+                }
+            });
+
+            player.addEventListener('error', (errorEvent) => {
+                console.error('Player error:', errorEvent.detail);
+                if (fallback) {
+                    console.log('Loading fallback source...');
+                    player.load(fallback).catch(console.error);
+                }
+            });
+
+            try {
+                console.log('Loading source:', source);
+                await player.load(source);
+                console.log('The video has now been loaded!');
+            } catch (error) {
+                console.error('Error while loading source:', error);
+                if (fallback) {
+                    console.log('Loading fallback source...');
+                    await player.load(fallback).catch(console.error);
+                }
+            }
+        }
+
+        // Initialize with default source
+        document.addEventListener('shaka-ui-loaded', () => {
+            const defaultSource = 'https://tonton-live-sg1.akamaized.net/live-hls/tonton12.m3u8?&hdnts=exp=1731916395~hmac=418532487f69910ec3fcd5918a4399eac23beae1f032924badf397641f9fb109';
+            const fallbackSource = 'https://linearjitp-playback.astro.com.my/dash-wv/linear/809/default_primary.mpd';
+            initPlayer(defaultSource, fallbackSource);
+        });
+
+        // Button Click Handlers
+        document.querySelectorAll('.nav1-link').forEach((button) => {
+            button.addEventListener('click', () => {
+                const source = button.getAttribute('data-value');
+                const fallback = button.getAttribute('data-fallback');
+
+                // Reset Active Button
+                document.querySelectorAll('.nav1-link').forEach((btn) => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Load new source
+                initPlayer(source, fallback);
+            });
+        });
+
+        document.addEventListener('shaka-ui-load-failed', () => {
+            console.error('Unable to load the Shaka Player UI library!');
+        });
+    </script>
