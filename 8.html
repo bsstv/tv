@@ -58,29 +58,7 @@
         }
     </style>
 
-    <!-- Navigation -->
-    <ul id="croOt">
-        <li class="nav-item">
-            <button class="nav1-link" data-value="https://linearjitp-playback.astro.com.my/dash-wv/linear/809/default_primary.mpd"
-                    data-fallback="https://linearjitp-playback.astro.com.my/dash-wv/linear/705/backup.mpd">TV3</button>
-        </li>
-                    <li class="nav-item">
-            <button class="nav1-link" data-value="https://linearjitp-playback.astro.com.my/dash-wv/linear/705/default.mpd"
-                    data-fallback="https://linearjitp-playback.astro.com.my/dash-wv/linear/705/default.mpd">TV9</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav1-link" data-value="https://linearjitp-playback.astro.com.my/dash-wv/linear/911/default.mpd"
-                    data-fallback="https://linearjitp-playback.astro.com.my/dash-wv/linear/705/default.mpd">8TV</button>
-        </li>
-         
-      
-              <li class="nav-item">
-            <button class="nav1-link" data-value="https://tonton-live-sg1.akamaized.net/live-hls/tonton13.m3u8?&hdnts=exp=1731915626~hmac=b6da9d8689403a84d2b455e403d8af2e481227555908368c2db3858de452c1e4"
-                    data-fallback="https://linearjitp-playback.astro.com.my/dash-wv/linear/707/default.mpd">DIDIKTV</button>
-        </li>
-      
-    </ul>
-
+   
     <!-- Player Container -->
     <center>
         <div data-shaka-player-container>
@@ -136,8 +114,20 @@
             initPlayer(defaultSource, fallbackSource);
         });
 
-        
-       );
+        // Button Click Handlers
+        document.querySelectorAll('.nav1-link').forEach((button) => {
+            button.addEventListener('click', () => {
+                const source = button.getAttribute('data-value');
+                const fallback = button.getAttribute('data-fallback');
+
+                // Reset Active Button
+                document.querySelectorAll('.nav1-link').forEach((btn) => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Load new source
+                initPlayer(source, fallback);
+            });
+        });
 
         document.addEventListener('shaka-ui-load-failed', () => {
             console.error('Unable to load the Shaka Player UI library!');
