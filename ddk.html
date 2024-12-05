@@ -1,0 +1,41 @@
+<html><head><meta content='width=device-width, initial-scale=1' name='viewport'/><meta content='never' name='referrer'/><meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/><meta content='#137FAA' name='theme-color'/><meta content='#137FAA' name='msapplication-navbutton-color'/><meta content='blogger' name='generator'/></head><body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.4.2/shaka-player.ui.min.js" crossorigin="anonymous"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.4.2/controls.min.css" crossorigin="anonymous"><style>body{margin:0!important}[data-shaka-player-container]{width:100%;height:100%;aspect-ratio:16/9}</style><div style="aspect-ratio:16/9"><div data-shaka-player-container="" shaka-controls="true" class="shaka-video-container"><video autoplay="" data-shaka-player="" id="video" style="width:100%;height:100%" class="shaka-video"></video><canvas class="shaka-canvas-container"></canvas></div><script>async function initPlayer(source, fallback) {
+            const video = document.getElementById('video');
+            const ui = video['ui'];
+            const controls = ui.getControls();
+            const player = controls.getPlayer();
+
+            player.configure({
+                drm: {
+                    clearKeys: {
+                        'e509735b5f89750d42ace2410ead7210': '1726083509d570b5de4730ab9f338cc3',
+                        '27828727f0a3a0b4fbc668378ccf8c10': '958e9cb7389e20948de5a542d2729ecf',
+                        '0cb7980e9d1d8957f9a293ed96342410': '11da1ad368d0cacffe4824b6b35e22b7',
+                        'O8Pw5Riu2S6AqYEY5bwsEA': 'X842T7xEmYVll7GalvRGSA',                      
+                        'HfqKZFr0HoPFIL3fkTk0yg': 'Zfavh1DSSyMNkbmEI3rB5A',
+                        'R6Ega0SCLIkyDnCRbPV7DA': '4EDKKqQm33ibo4S6VhiRtA'
+                    }
+                }
+            });
+
+            player.addEventListener('error', (errorEvent) => {
+                console.error('Player error:', errorEvent.detail);
+                if (fallback) {
+                    player.load(fallback).catch(console.error);
+                }
+            });
+
+            try {
+                await player.load(source);
+            } catch (error) {
+                if (fallback) {
+                    await player.load(fallback).catch(console.error);
+                }
+            }
+        }
+
+        document.addEventListener('shaka-ui-loaded', () => {
+            initPlayer('https://unifi-live07.secureswiftcontent.com/UnifiHD/live06.mpd', 'https://unifi-live07.secureswiftcontent.com/UnifiHD/live06.mpd');
+        });</script>
+        <script>document.addEventListener("contextmenu", (event) => {event.preventDefault();});</script>   
+</body></html>
