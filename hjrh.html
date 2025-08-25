@@ -1,7 +1,7 @@
 <script type="text/javascript"
-      src="/player/min.js">
+      src="/player/min.js">      
   </script>
-  <div id="player"></div>
-  <script>
-    var player = new Clappr.Player({source: "https://rdchannel.rd.go.th/contents/msteam_live_13-08-63.mp4", parentId: "#player" ,poster :'http://clappr.io/poster.png'});
-  </script>
+<script type="text/javascript" src="/player/ctrl.js">
+  <div id="bossmov"></div>
+  <script>fetch('https://www.bosstv.top/get/data/alhjrh.json').then(response=>response.json()).then(data=>{const m3u8Link=data.link;const clappr=new Clappr.Player({source:m3u8Link,poster:"player/cvr.jpg",autoPlay:!1,disableErrorScreen:!0,width:"100%",parentId:"#bossmov",plugins:[MediaControl.MainPlugin,MediaControl.PlayPauseButtonPlugin,MediaControl.SeekBarPlugin,MediaControl.FullscreenButtonPlugin,MediaControl.LevelSelectorPlugin,],controls:!0,events:{onError:function(e){setTimeout(function(){clappr.configure({autoPlay:!0,source:"https://www.w3schools.com/html/mov_bbb.mp4",})},1000)},},})})
+clappr.getPlugin('spinner').enable();window.player=clappr;</script>
